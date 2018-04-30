@@ -1,10 +1,19 @@
 
 <!DOCTYPE html>
-<html>
+<html style="text-align: center;">
     <head>
+        
         <meta charset="UTF-8">
         <title>AJAX: Sign Up Page</title>
 
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
         <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
         <script>
         
@@ -18,6 +27,7 @@
         
         <script>
             /* global $*/
+            var chicken =true; 
    function getCountyList_jQuery() {        
      $.ajax({
             type: "get",
@@ -41,7 +51,11 @@
             $(document).ready( function(){
                 
                 $("#submit").click( function(){
-            
+                
+                    if(chicken)
+                    {
+                        alert("Please check and retype password!");
+                    }
                         
                 });
                 
@@ -81,9 +95,11 @@
                     var password = $("#pass1").val();
                     var passwordCheck = $("#pass2").val();
                     if (password == passwordCheck){
+                        chicken= false; 
                         $("#passwordOutput").html("passwords match");
                         $("#passwordOutput").css("color","green");
                     } else {
+                        chicken=true
                         $("#passwordOutput").html("passwords doesn't match");
                         $("#passwordOutput").css("color","red");
                     }
@@ -131,8 +147,17 @@
                         success: function(data,status) {
                           
                           //alert(data.city);
+                          if(!data)
+                            {
+                                $("#zip").html("Not a valid zip code!");
+                                $("#zip").css("color","red");
+                            }
+                            else{
+                                $("#zip").html("");
                           $("#city").html(data.city);
-                        
+                          $("#latitude").html(data.latitude);
+                          $("#longitude").html(data.longitude);
+                            }
                         },
                         complete: function(data,status) { //optional, used for debugging purposes
                         //alert(status);
@@ -152,23 +177,23 @@
 
     </head>
 
-    <body>
+    <body >
     
        <h1> Sign Up Form </h1>
     
         <form onsubmit="return validateForm()">
             <fieldset>
-               <legend>Sign Up</legend>
+               <legend style="text-align: center;">Sign Up</legend>
                 First Name:  <input type="text"><br> 
                 Last Name:   <input type="text"><br> 
                 Email:       <input type="text"><br> 
                 Phone Number:<input type="text"><br><br>
-                Zip Code:    <input type="text" id="zipCode"><br>
+                Zip Code:    <input type="text" id="zipCode"> <span id = "zip"></span> <br>
                 City:        <span id="city"></span>
                 <br>
-                Latitude: 
+                Latitude:     <span id="latitude"></span>
                 <br>
-                Longitude:
+                Longitude:     <span id="longitude"></span>
                 <br><br>
                 State: 
                 <select id="state" onchange="getCountyList_jQuery()">
@@ -188,7 +213,7 @@
                 
                 Type Password Again: <input id="pass2" type="password"><span id = "passwordOutput"></span><br>
                 
-                <input id = "submit" type="submit" value="Sign up!">
+                <input id = "submit" class="btn" type="submit" value="Sign up!">
                 <br />
             </fieldset>
         </form>
